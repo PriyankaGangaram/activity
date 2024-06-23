@@ -1,0 +1,81 @@
+---
+title: "ACTIVITY"
+author: "PRIYANKA RAMESH GANGARAM"
+date: "23 June 2024"
+output: 
+  html_document:
+    theme: 
+      bootswatch: materia
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(ggplot2)
+library(dplyr)
+library(readr)
+```
+
+# Introduction
+
+I want to utilize the dataset of airline safety data made available at fivethirtyeight for this project. This would serve me with the tracking record of airlines' safety over different time periods. Data of this nature will further indicate the count of incidents, fatal accidents, and fatalities of the listed airlines, which would help provide quite useful knowledge related to trends in airline safety.
+
+#Data Loading and Cleaning
+
+```{r, echo=TRUE}
+# Load the dataset
+url <- "https://raw.githubusercontent.com/fivethirtyeight/data/master/airline-safety/airline-safety.csv"
+airline_safety <- read_csv(url)
+
+# Rename columns for better readability
+airline_safety <- airline_safety %>%
+  rename(
+    airline_name = airline,
+    weekly_seat_km = avail_seat_km_per_week,
+    incidents_85_99 = incidents_85_99,
+    fatal_accidents_85_99 = fatal_accidents_85_99,
+    fatalities_85_99 = fatalities_85_99,
+    incidents_00_14 = incidents_00_14,
+    fatal_accidents_00_14 = fatal_accidents_00_14,
+    fatalities_00_14 = fatalities_00_14
+  )
+
+# Display the first few rows of the dataframe
+head(airline_safety)
+
+```
+
+# Exploratory Data Analysis
+
+## Histogram of Incidents (2000-2014)
+
+This histogram shows the distribution of the number of incidents for various airlines from 2000 to 2014.
+
+```{r, echo=FALSE}
+# Create histogram for incidents from 2000 to 2014
+ggplot(airline_safety, aes(x = incidents_00_14)) +
+  geom_histogram(binwidth = 1, fill = "steelblue", colour = "black") +
+  labs(title = "Histogram of Incidents (2000-2014)",
+       x = "Number of Incidents",
+       y = "Frequency") +
+  theme_minimal()
+
+```
+
+## Scatterplot of Incidents vs. Fatalities (2000-2014)
+
+This scatterplot shows the relationship between the number of incidents and the number of fatalities from 2000 to 2014.
+
+```{r, echo=FALSE}
+# Create scatterplot for incidents vs. fatalities from 2000 to 2014
+ggplot(airline_safety, aes(x = incidents_00_14, y = fatalities_00_14)) +
+  geom_point(colour = "red") +
+  geom_smooth(method = "lm", se = FALSE, colour = "blue") +
+  labs(title = "Scatterplot of Incidents vs. Fatalities (2000-2014)",
+       x = "Number of Incidents",
+       y = "Number of Fatalities") +
+  theme_minimal()
+```
+
+# Conclusion
+
+The visualizations clearly bring out the safety record of different airlines. While the histogram represents the frequency at which values of incidents alone ranged across various airlines, the scatter plot represents the relationship between incidents and fatalities.
